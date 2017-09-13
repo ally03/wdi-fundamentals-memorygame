@@ -1,46 +1,68 @@
 var cards = [
-{
-    rank: "queen",
-    suit: "hearts",
-    cardImage: "images/queen-of-hearts.png"
-},
-{
-    rank: "queen",
-    suit: "diamonds",
-    cardImage: "images/queen-of-diamonds.png"
-},
-{
-    rank: "king",
-    suit: "hearts",
-    cardImage: "images/king-of-hearts.png"
-},
-{
-    rank: "king",
-    suit: "diamonds",
-    cardImage: "images/king-of-diamonds.png"
-}
+    {
+        rank: "queen",
+        suit: "hearts",
+        cardImage: "images/queen-of-hearts.png"
+    },
+    {
+        rank: "queen",
+        suit: "diamonds",
+        cardImage: "images/queen-of-diamonds.png"
+    },
+    {
+        rank: "king",
+        suit: "hearts",
+        cardImage: "images/king-of-hearts.png"
+    },
+    {
+        rank: "king",
+        suit: "diamonds",
+        cardImage: "images/king-of-diamonds.png"
+    }
 ];
 var cardsInPlay = [];
+var score = 0;
 var checkForMatch = function () {
-    if (cardsInPlay.length === 2) {
-        if (cardsInPlay[0] === cardsInPlay[1]) {
-            checkForMatch();
-            alert("You found a match!");
-        } else {
-            alert("Sorry, try again.")
-        }
+    if (cardsInPlay[0] === cardsInPlay[1]) {
+        score += 1;
+        alert("You found a match! " + score);
+
+    } else {
+        alert("Sorry, try again.");
     }
 };
-var flipCard = function (cardId) {
 
-    console.log("User flipped " + cards[cardId].rank);
+var flipCard = function () {
+    var cardId = this.getAttribute('data-id');
+    this.setAttribute('src',cards[cardId].cardImage);
+    console.log('User flipped ' + cards[cardId].rank);
     cardsInPlay.push(cards[cardId].rank);
-    console.log(cards[cardId].cardImage);
-    console.log(cards[cardId].suit);
-    checkForMatch();
-
-
+    if (cardsInPlay.length === 2) {
+        checkForMatch();
+    }
 };
-flipCard(0);
-flipCard(2);
+
+var createBoard = function () {
+    for (var i = 0; i < cards.length; i++) {
+        var cardElement = document.createElement('img');
+        cardElement.setAttribute('src', 'images/back.png');
+        cardElement.setAttribute('data-id',i);
+        cardElement.addEventListener('click',flipCard);
+        var board = document.getElementById('game-board');
+        board.appendChild(cardElement);
+
+    }
+};
+var reset = function () {
+    document.getElementById('game-board').innerHTML = "";
+    cardsInPlay = [];
+    createBoard();
+}
+
+    var list = document.getElementsByTagName('game-board');
+var resetButton = document.getElementById('resetAll');
+resetButton.addEventListener('click',reset);
+
+createBoard();
+
 
